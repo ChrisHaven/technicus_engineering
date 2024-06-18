@@ -10,7 +10,8 @@ small_blind = 100
 pot = 0
 
 turn_num = None
-prev_bet = 0
+global prev_bet
+prev_bet = big_blind
 
 class Player:
     def __init__ (self, number, chips):
@@ -32,9 +33,9 @@ def deal_cards():
 def pre_flop():
     turn_num = 0
     for i in range(player_count):
-        if players[i].hand == []:
+        if (players[i].hand == []) or (players[i].chips == 0):
             turn_num = turn_num + 1
-            print(f'speler{players[i].number} heeft gefold en doet dus niet meer mee!')
+            print(f'speler{players[i].number} doet niet meer mee!')
         else:
             choice = input(f'Speler{players[i].number} wat wil je doen? fold, check of bet) ')
             turn_choice(choice, i)
@@ -54,9 +55,16 @@ def turn_choice(choice, i):
     if choice == 'fold':
         fold(i)
     elif choice == 'check':
-        check(i)
+        if prev_bet > 0:
+            print(f'Je kan nu niet checken omdat er al {prev_bet} is ingezet!')
+            choice = input('kies fold, call of bet! ')
+            turn_choice(choice, i)
+        else:
+            check(i)
     elif choice == 'bet':
         bet(i)
+    elif choice == 'call':
+        call(i)
     else:
         choice = input('kies fold, check of bet! ')
         turn_choice(choice, i)
@@ -76,24 +84,41 @@ def bet(i):
     global pot
     global prev_bet
     bet_amount = input(f'Speler{players[i].number} hoeveel wil je inzetten? De minimum raise is {prev_bet}! Als je toch wil folden of checken typ dan fold of check) ')
+    bet_input = int(bet_amount)
     if bet_amount == 'fold':
         fold(i)
     elif bet_amount == 'check':
         check(i)
     elif bet_amount.isdigit():
-        bet_input = int(bet_amount)
-        if bet_input < prev_bet:
-            bet(i)
-        else:
-            print(f'Je gaat {bet_amount} inzetten')
-        
-            players[i].chips = players[i].chips - bet_input
-            pot = pot + bet_input
-            prev_bet = bet_input
-            print(f'De pot is {pot}')
+        if int(bet_amount) >= players[i].chips:
+            prev_bet = players[i].chips
+            all_in(i)
+        else:    
+            if bet_input < prev_bet:
+                bet(i)
+            else:
+                print(f'Je gaat {bet_amount} inzetten')
+            
+                players[i].chips = players[i].chips - bet_input
+                pot = pot + bet_input
+                prev_bet = bet_input
+                print(f'De pot is {pot}')
     else:
         print('je moet geld inzetten, checken of folden! Je kan alleen hele euros inzetten!')
         bet(i)
+
+def all_in(i):
+    bet_amount = players[i].chips
+    players[i].chips = players[i].chips - bet_amount
+    print(f'Speler {players[i].number} is ALL IN met {bet_amount}!')
+    return 
+
+def call(i):
+    global pot
+    bet_amount = prev_bet
+    players[i].chips = players[i].chips - bet_amount
+    pot = pot + bet_amount
+    print(f'Je hebt {bet_amount} gecalled')
 
 
 
