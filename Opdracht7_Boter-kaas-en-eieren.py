@@ -34,7 +34,7 @@ def beurtSpelerX():
 def beurtSpelerO():
     print("Speler O is aan de beurt")
     plaats = int(input("gebruik getallen 1-9:"))
-    coord = keuzes[plaats]
+    coord = keuzes[plaats] 
     bord[coord[0]][coord[1]] = spelerO
     printBord()
     winnaar(bord, spelerO)  
@@ -77,5 +77,3 @@ while (len(leegVakje()) != 0):
 
 print("\n")
 printBord()
-
-
