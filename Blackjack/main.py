@@ -50,7 +50,7 @@ dealerstr.pack()
 #player frame
 player_frame = tk.Frame(root) # frame that the cards will be in
 player_frame.pack(fill="both", expand="yes")
-playerstr = tk.Label(player_frame, text="player", height=1)
+playerstr = tk.Label(player_frame, text="speler", height=1)
 playerstr.pack()
 
 #button frame
