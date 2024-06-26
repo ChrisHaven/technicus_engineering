@@ -27,6 +27,11 @@ def calculate_value(hand):
         
     while value > 21 and aces > 0:
         value -= 10
-        ace_count -= 1
+        aces -= 1
 
     return value, aces
+
+
+def add_new_card(hand, deck):
+    hand.append(deck.pop())
+    return hand
