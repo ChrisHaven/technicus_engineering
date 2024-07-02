@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import *
+from tkinter import messagebox
 from PIL import ImageTk
 from PIL import Image
 
@@ -31,10 +31,10 @@ def hit_command(hand):
 
     add_card(player_frame, f'cards/{player_hand[len(player_hand)-1][0]}_of_{player_hand[len(player_hand)-1][1]}.png')
 
-    print(player_hand)
-    print(player_display_value)
-    print(f'cards/{player_hand[len(player_hand)-1][0]}_of_{player_hand[len(player_hand)-1][1]}')
-    print(len(player_hand))
+    # print(player_hand)
+    # print(player_display_value)
+    # print(f'cards/{player_hand[len(player_hand)-1][0]}_of_{player_hand[len(player_hand)-1][1]}')
+    # print(len(player_hand))
 
 def add_card(frame, card_path): #function to display card
     original_img = Image.open(card_path)
@@ -62,6 +62,17 @@ def reveal_card(card_label, card_path):  # function to reveal hidden card
     card_label.configure(image=img)
     card_label.image = img  # prevent garbage collection
 
+def add_chip_button():
+    add = chip_entry.get()
+    if add.isdigit():
+        add = float(add)
+        player.add_chips(add)
+        chip_display.config(text=f"chips: {player.chips}")
+        #print(f'digit {add}')
+    else:
+        #print('not digit')
+        messagebox.showinfo(title="ongeldig getal", message="Vul een geldig getal in! Geen comma getallen of letters!")
+
 #start of GUI
 root = tk.Tk()
 root.title('Blackjack')
@@ -83,8 +94,12 @@ playerstr.pack()
 #chip entry
 chip_entry = tk.Entry(player_frame)
 chip_entry.pack()
-chip_entry_botton = tk.Button(player_frame, text="deposit chips", font= ("Arial", 11), height=1)
+chip_entry_botton = tk.Button(player_frame, text="deposit chips", font= ("Arial", 11), height=1, command=add_chip_button)
 chip_entry_botton.pack()
+
+#chip amount
+chip_display = tk.Label(player_frame, text=f"chips: {player.chips}", font=("Arial", 14))
+chip_display.pack()
 
 #button frame
 button_frame = tk.Frame(root)
@@ -122,7 +137,7 @@ if dealer_value[1] > 0:
 else:
     dealer_display_value = dealer_value[0]
 
-dealer_val = tk.Label(dealer_frame, text=dealer_display_value, height=1, font=('arial', 14))
+dealer_val = tk.Label(dealer_frame, text=dealer_display_value, height=1, font=('Arial', 14))
 dealer_val.pack()
 
 hidden_card = add_hidden_card(dealer_frame)

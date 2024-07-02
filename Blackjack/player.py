@@ -1,7 +1,7 @@
 from cards import *
 
 hand = []
-chips = None
+chips = float(25)
 
 def double():
     print('double')
@@ -20,3 +20,7 @@ def split():
 def calculate_player_value(player_hand):
     player_value = calculate_value(player_hand)
     return player_value
+
+def add_chips(add_val):
+    global chips
+    chips += add_val
