@@ -43,6 +43,23 @@ def split_command(hand):
     hand1 = hands[0]
     hand2 = hands[1]
 
+    value1 = player.calculate_player_value(hand1)
+    value2 = player.calculate_player_value(hand2)
+
+    if value1[1] > 0:
+        display_value1 = f'{value1[0]}/{value1[0] - 10}'
+    else:
+        display_value1 = value1[0]
+
+    if value1[1] > 0:
+        display_value2 = f'{value2[0]}/{value2[0] - 10}'
+    else:
+        display_value2 = value2[0]
+
+    player_val.config(text=display_value1)
+    player_val_double = tk.Label(player_frame_double, text=display_value2, height=1, font=('arial', 14))
+    player_val_double.pack()
+
     if hands[0] == 'error':
         messagebox.showinfo(title='error', message='je mag alleen splitten als beide waardes gelijk zijn en als er nog niet is gehit of gesplit!')
     else:
